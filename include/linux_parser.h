@@ -27,6 +27,12 @@ int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
 
+// PRIVATE:
+// looks up the key=keyword from /proc/stat file and returns an int for the value found:
+bool GetAttributeValueFromFile(std::string& keyValue,
+                               const std::string& keyword,
+                               const std::string& path);
+
 // CPU
 enum CPUStates {
   kUser_ = 0,
@@ -45,6 +51,7 @@ long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
 long IdleJiffies();
+int NumberOfCpus();
 
 // Processes
 std::string Command(int pid);
@@ -52,6 +59,8 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
+std::string UpTimeString(int pid);
+float ProcessUtilization(int pid);
 };  // namespace LinuxParser
 
 #endif
