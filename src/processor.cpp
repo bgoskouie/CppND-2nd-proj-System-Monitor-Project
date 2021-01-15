@@ -1,7 +1,7 @@
 #include "processor.h"
 #include "linux_parser.h"
+#include "format.h"
 
-using std::stoll;  // string to unsigned long long int
 
 // DONE by BABAK: Return the aggregate CPU utilization
 float Processor::Utilization() {
@@ -61,27 +61,27 @@ float Processor::CpuPercentUsage() {
   // extract each jiffi from the vector of strings
   // convert it to long and store in a local variable.
   //Recent:
-  unsigned long long int usertime =   stoll(cpuUtilRecent_[LinuxParser::CPUStates::kUser_])     ;
-  unsigned long long int guest =      stoll(cpuUtilRecent_[LinuxParser::CPUStates::kGuest_])    ;
-  unsigned long long int nicetime =   stoll(cpuUtilRecent_[LinuxParser::CPUStates::kNice_])     ;
-  unsigned long long int guestnice =  stoll(cpuUtilRecent_[LinuxParser::CPUStates::kGuestNice_]);
-  unsigned long long int idletime =   stoll(cpuUtilRecent_[LinuxParser::CPUStates::kIdle_])     ;
-  unsigned long long int ioWait =     stoll(cpuUtilRecent_[LinuxParser::CPUStates::kIOwait_])   ;
-  unsigned long long int systemtime = stoll(cpuUtilRecent_[LinuxParser::CPUStates::kSystem_])   ;
-  unsigned long long int irq =        stoll(cpuUtilRecent_[LinuxParser::CPUStates::kIRQ_])      ;
-  unsigned long long int softIrq =    stoll(cpuUtilRecent_[LinuxParser::CPUStates::kSoftIRQ_])  ;
-  unsigned long long int steal =      stoll(cpuUtilRecent_[LinuxParser::CPUStates::kSteal_])    ;
+  unsigned long long int usertime =   Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kUser_])     ;
+  unsigned long long int guest =      Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kGuest_])    ;
+  unsigned long long int nicetime =   Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kNice_])     ;
+  unsigned long long int guestnice =  Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kGuestNice_]);
+  unsigned long long int idletime =   Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kIdle_])     ;
+  unsigned long long int ioWait =     Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kIOwait_])   ;
+  unsigned long long int systemtime = Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kSystem_])   ;
+  unsigned long long int irq =        Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kIRQ_])      ;
+  unsigned long long int softIrq =    Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kSoftIRQ_])  ;
+  unsigned long long int steal =      Format::StoLL(cpuUtilRecent_[LinuxParser::CPUStates::kSteal_])    ;
   //Prev:
-  unsigned long long int usertimeP =   stoll(cpuUtilPrev_[LinuxParser::CPUStates::kUser_])     ;
-  unsigned long long int guestP =      stoll(cpuUtilPrev_[LinuxParser::CPUStates::kGuest_])    ;
-  unsigned long long int nicetimeP =   stoll(cpuUtilPrev_[LinuxParser::CPUStates::kNice_])     ;
-  unsigned long long int guestniceP =  stoll(cpuUtilPrev_[LinuxParser::CPUStates::kGuestNice_]);
-  unsigned long long int idletimeP =   stoll(cpuUtilPrev_[LinuxParser::CPUStates::kIdle_])     ;
-  unsigned long long int ioWaitP =     stoll(cpuUtilPrev_[LinuxParser::CPUStates::kIOwait_])   ;
-  unsigned long long int systemtimeP = stoll(cpuUtilPrev_[LinuxParser::CPUStates::kSystem_])   ;
-  unsigned long long int irqP =        stoll(cpuUtilPrev_[LinuxParser::CPUStates::kIRQ_])      ;
-  unsigned long long int softIrqP =    stoll(cpuUtilPrev_[LinuxParser::CPUStates::kSoftIRQ_])  ;
-  unsigned long long int stealP =      stoll(cpuUtilPrev_[LinuxParser::CPUStates::kSteal_])    ;
+  unsigned long long int usertimeP =   Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kUser_])     ;
+  unsigned long long int guestP =      Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kGuest_])    ;
+  unsigned long long int nicetimeP =   Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kNice_])     ;
+  unsigned long long int guestniceP =  Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kGuestNice_]);
+  unsigned long long int idletimeP =   Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kIdle_])     ;
+  unsigned long long int ioWaitP =     Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kIOwait_])   ;
+  unsigned long long int systemtimeP = Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kSystem_])   ;
+  unsigned long long int irqP =        Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kIRQ_])      ;
+  unsigned long long int softIrqP =    Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kSoftIRQ_])  ;
+  unsigned long long int stealP =      Format::StoLL(cpuUtilPrev_[LinuxParser::CPUStates::kSteal_])    ;
 
 
   // from: https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux

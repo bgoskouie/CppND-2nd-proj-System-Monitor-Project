@@ -7,7 +7,6 @@
 #include "linux_parser.h"
 
 using std::stof;    // string to float
-using std::stol;    // string to long
 using std::string;
 using std::to_string;    // convert an integer to a string
 using std::vector;
@@ -84,11 +83,11 @@ float LinuxParser::MemoryUtilization() {
       while (linestream >> key >> value >> kb) {
         if (key == "MemTotal") {
           // std::replace(value.begin(), value.end(), '_', ' ');
-          memtotal = stoi(value);
+          memtotal = Format::StoI(value);
         }
         if (key == "MemFree") {
           // std::replace(value.begin(), value.end(), '_', ' ');
-          memfree = stoi(value);
+          memfree = Format::StoI(value);
         }
         /*
         if (key == "MemAvailable") {
@@ -179,7 +178,9 @@ int LinuxParser::TotalProcesses() {
   string keyValue;
   if (GetAttributeValueFromFile(keyValue,"processes", kProcDirectory + kStatFilename))
   {
-    return stoi(keyValue);
+    if (std::all_of(keyValue.begin(), keyValue.end(), isdigit)) {
+      return Format::StoI(keyValue);
+    }
   }
   return 0;   // not found
 }
@@ -189,7 +190,9 @@ int LinuxParser::RunningProcesses() {
   string keyValue;
   if (GetAttributeValueFromFile(keyValue, "procs_running", kProcDirectory + kStatFilename))
   {
-    return stoi(keyValue);
+    if (std::all_of(keyValue.begin(), keyValue.end(), isdigit)) {
+      return Format::StoI(keyValue);
+    }
   }
   return 0;   // not found
 }
@@ -230,7 +233,7 @@ string LinuxParser::Ram(int pid) {
   string keyValue;
   (void)GetAttributeValueFromFile(keyValue, "VmSize:", kProcDirectory + to_string(pid) + kStatusFilename);
   // return keyValue + " kB";
-  long int megaBytes = stol(keyValue)/1000; // converts kB to MB
+  long int megaBytes = Format::StoL(keyValue)/1000; // converts kB to MB
   return to_string(megaBytes);
 }
 
@@ -246,7 +249,8 @@ string LinuxParser::Uid(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::User(int pid) {
   string uidOfThisPid = Uid(pid);
-  int uidOfThisPid_i = stoi(uidOfThisPid);
+  
+  int uidOfThisPid_i = Format::StoI(uidOfThisPid);
   string line;
   string delimiter(":");
   std::ifstream stream(kPasswordPath);
@@ -262,7 +266,7 @@ string LinuxParser::User(int pid) {
       std::getline(linestream, uidStart, ':');
       std::getline(linestream, uidEnd, ':');
       // if (stoi(uidStart) <= uidOfThisPid_i && uidOfThisPid_i <= stoi(uidEnd)) {
-      if (stoi(uidStart) == uidOfThisPid_i) {
+      if (Format::StoI(uidStart) == uidOfThisPid_i) {
         return user;
       }
     }
@@ -284,7 +288,7 @@ long LinuxParser::UpTime(int pid) {
     for (int i = 0; i < startTimeIdx; ++i) {
       linestream >> value;
     }
-    valueLong = stol(value);
+    valueLong = Format::StoL(value);
   }
   return valueLong;
 }
@@ -314,19 +318,19 @@ float LinuxParser::ProcessUtilization(int pid) {
     while (linestream >> value) {
       idx++;
       if (idx == uTimeIdx) {
-        uTime = stol(value);
+        uTime = Format::StoL(value);
       }
       if (idx == sTimeIdx) {
-        sTime = stol(value);
+        sTime = Format::StoL(value);
       }
       if (idx == cuTimeIdx) {
-        cuTime = stol(value);
+        cuTime = Format::StoL(value);
       }
       if (idx == csTimeIdx) {
-        csTime = stol(value);
+        csTime = Format::StoL(value);
       }
       if (idx == startTimeIdx) {
-        startTime = stol(value);
+        startTime = Format::StoL(value);
       }
     }
   }

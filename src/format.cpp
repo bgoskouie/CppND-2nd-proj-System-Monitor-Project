@@ -30,3 +30,27 @@ string Format::ElapsedTime(long seconds)
     out[strlen(out)] = 0;
     return std::string(out);
 }
+
+int Format::StoI(const std::string& input) {
+    int out = 0;
+    if (std::all_of(input.begin(), input.end(), isdigit) && (input.size() > 0)) {
+        out = stoi(input);
+    }
+    return out;
+}
+
+unsigned long int Format::StoL(const std::string& input) {
+    unsigned long int out = 0;
+    if (std::all_of(input.begin(), input.end(), isdigit) && (input.size() > 0)) {
+        out = stol(input);
+    }
+    return out;
+}
+
+unsigned long long int Format::StoLL(const std::string& input) {
+    unsigned long long int out = 0;
+    if (std::all_of(input.begin(), input.end(), isdigit) && (input.size() > 0)) {
+        out = stoll(input);
+    }
+    return out;
+}
