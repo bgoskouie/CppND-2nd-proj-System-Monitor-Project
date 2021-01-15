@@ -11,7 +11,7 @@ public:
   Processor()
     : clockTicks_(sysconf(_SC_CLK_TCK)),
       numOfCpus_(LinuxParser::NumberOfCpus()) {
-        Utilization();
+        (void)Utilization();
       };
   float Utilization();  // DONE by BABAK: See src/processor.cpp
 

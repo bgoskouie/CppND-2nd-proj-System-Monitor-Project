@@ -2,6 +2,7 @@
 #include <iostream>
 #include "string.h"
 #include "format.h"
+#define MAXTIME 360000  // i.e. 100 hours. 99hr:59min:59sec is acceptable but 100hr:00min:00sec is not acceptable
 #define HOUR 3600
 #define MIN 60
 
@@ -18,6 +19,7 @@ string Format::ElapsedTime(long seconds)
 {
     char out[10];
     std::string outputStr{};
+    seconds %= MAXTIME;
     int hour=seconds/HOUR;
     int second=seconds % HOUR;
     int minute=second/MIN;

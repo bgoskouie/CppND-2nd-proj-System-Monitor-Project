@@ -56,6 +56,8 @@ float Processor::Utilization() {
 }
 
 float Processor::CpuPercentUsage() {
+  // output:
+  float cpuPercentage = 0.0;
   // extract each jiffi from the vector of strings
   // convert it to long and store in a local variable.
   //Recent:
@@ -106,6 +108,8 @@ float Processor::CpuPercentUsage() {
   // difference:
   unsigned long long int totald = totaltime - totaltimeP;
   unsigned long long int idled = idlealltime - idlealltimeP;
-  float cpuPercentage = (float)(totald - idled)/(float)totald;
+  if (totald != 0) {
+    cpuPercentage = (float)(totald - idled)/(float)totald;
+  }
   return cpuPercentage;
 }
