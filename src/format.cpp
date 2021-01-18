@@ -31,6 +31,27 @@ string Format::ElapsedTime(long seconds)
     return std::string(out);
 }
 
+// below is the approach recommended by the Reviewer:
+// #include <string>
+// #include <iomanip>
+// #include "format.h"
+
+// using std::string;
+
+// // INPUT: Long int measuring seconds
+// // OUTPUT: HH:MM:SS
+// string Format::ElapsedTime(long seconds) {
+//   long h = seconds / 3600;
+//   long m = (seconds % 3600) / 60;
+//   long s = (seconds % 3600 % 60);
+//   std::ostringstream elapsedTime;    // important that an output string stream can be used here!
+//   elapsedTime << std::setw(2) << std::setfill('0') << h
+//               << ":" << std::setw(2) << std::setfill('0') << m
+//               << ":" << std::setw(2) << std::setfill('0') << s;
+//   return elapsedTime.str();
+//  }
+
+
 int Format::StoI(const std::string& input) {
     int out = 0;
     if (std::all_of(input.begin(), input.end(), isdigit) && (input.size() > 0)) {
@@ -54,3 +75,11 @@ unsigned long long int Format::StoLL(const std::string& input) {
     }
     return out;
 }
+
+// float Format::StoF(const std::string& input) {
+//     float out = 0.0F;
+//     if (std::all_of(input.begin(), input.end(), is_numeric) && (input.size() > 0)) {
+//         out = stof(input);
+//     }
+//     return out;
+// }

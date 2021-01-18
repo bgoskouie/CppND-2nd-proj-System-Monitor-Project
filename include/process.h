@@ -15,7 +15,7 @@ class Process {
   std::string Command();                   // DONE by BABAK: See src/process.cpp
   float CpuUtilization() const;            // DONE by BABAK: See src/process.cpp
   std::string Ram();                       // DONE by BABAK: See src/process.cpp
-  long int UpTime();                       // DONE by BABAK: See src/process.cpp
+  long int UpTime() const;                       // DONE by BABAK: See src/process.cpp
 
   // use this to sort processes by which is the most ACTIVE (e.g. higher CpuUtilization)
   bool operator<(Process const& a) const;  // DONE by BABAK: See src/process.cpp

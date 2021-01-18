@@ -70,7 +70,8 @@ vector<int> LinuxParser::Pids() {
 // TODO: Read and return the system memory utilization
 float LinuxParser::MemoryUtilization() {
   string key, value, kb;
-  int memtotal, memfree;   //, memavailable, buffers, cached;
+  int memtotal = 0;
+  int memfree = 0;   //, memavailable, buffers, cached;
   string line;
   std::ifstream filestream(kProcDirectory + kMeminfoFilename);
   if (filestream.is_open()) {
@@ -111,13 +112,19 @@ float LinuxParser::MemoryUtilization() {
       }
     }
   }
-  return ((float)memtotal - (float)memfree)/((float)memtotal);
+  if (memtotal != 0) {
+    return ((float)memtotal - (float)memfree)/((float)memtotal);
+  }
+  else {
+    return 0.0f;
+  }
 }
 
 // TODO: Read and return the system uptime
 long LinuxParser::UpTime() {
   string suspend, idle;
-  float suspendTime;   //, idleTime;
+  float suspendTime = 0;
+  // float idleTime;
   string line;
   std::ifstream filestream(kProcDirectory + kUptimeFilename);
   if (filestream.is_open()) {
@@ -127,7 +134,10 @@ long LinuxParser::UpTime() {
     suspendTime = stof(suspend);
     // idleTime = stof(idle);
   }
-  return suspendTime;  // There are 2 numbers here, returning just one of them. What to do with the idleTime? func has only one return.
+  return suspendTime;  // idle time not used here!
+  // another way to get suspendTime from terminal is
+  // uptime -s    (will tell you the data/time computer was turned on)
+  // cat /proc/uptime on the other hand will tell you the number of seconds that the system has been ON
 }
 
 // TODO: Read and return the number of jiffies for the system
@@ -150,7 +160,7 @@ long LinuxParser::ActiveJiffies() {
 // TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() {
   return 0;
-  }
+}
 
 // TODO: Read and return CPU utilization
 vector<string> LinuxParser::CpuUtilization() {
@@ -231,7 +241,9 @@ string LinuxParser::Command(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid) {
   string keyValue;
-  (void)GetAttributeValueFromFile(keyValue, "VmSize:", kProcDirectory + to_string(pid) + kStatusFilename);
+  if (!GetAttributeValueFromFile(keyValue, "VmSize:", kProcDirectory + to_string(pid) + kStatusFilename)) {
+    return string("0");  // not found
+  }
   // return keyValue + " kB";
   long int megaBytes = Format::StoL(keyValue)/1000; // converts kB to MB
   return to_string(megaBytes);
@@ -241,7 +253,9 @@ string LinuxParser::Ram(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Uid(int pid) {
   string keyValue;
-  (void)GetAttributeValueFromFile(keyValue, "Uid:", kProcDirectory + to_string(pid) + kStatusFilename);
+  if (!GetAttributeValueFromFile(keyValue, "Uid:", kProcDirectory + to_string(pid) + kStatusFilename)) {
+    return string("0");  // not found
+  }
   return keyValue;  // is an int!!
 }
 
@@ -249,7 +263,7 @@ string LinuxParser::Uid(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::User(int pid) {
   string uidOfThisPid = Uid(pid);
-  
+
   int uidOfThisPid_i = Format::StoI(uidOfThisPid);
   string line;
   string delimiter(":");
@@ -277,7 +291,8 @@ string LinuxParser::User(int pid) {
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid) {
-  long valueLong;
+  long clockTicks = sysconf(_SC_CLK_TCK);
+  long valueLong = 0;
   string value;
   string line;
   int startTimeIdx = 22;   // one based index of UpTime
@@ -290,13 +305,14 @@ long LinuxParser::UpTime(int pid) {
     }
     valueLong = Format::StoL(value);
   }
-  return valueLong;
+  return (long)(valueLong/clockTicks);
 }
 
 string LinuxParser::UpTimeString(int pid) {
   long ut = UpTime(pid);
-  long clockTicks = sysconf(_SC_CLK_TCK);
-  return Format::ElapsedTime((long)(ut/clockTicks));
+  // long clockTicks = sysconf(_SC_CLK_TCK);
+  // return Format::ElapsedTime((long)(ut/clockTicks));
+  return Format::ElapsedTime(ut);
 }
 
 float LinuxParser::ProcessUtilization(int pid) {

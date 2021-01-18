@@ -12,6 +12,8 @@ namespace Format {
   unsigned long int StoL(const std::string& input);
 
   unsigned long long int StoLL(const std::string& input);
+
+  // float StoF(const std::string& input);
 };                                    // namespace Format
 
 

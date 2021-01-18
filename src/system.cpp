@@ -17,7 +17,8 @@ using std::vector;
 
 // DONE by BABAK: Return the system's CPU
 Processor& System::Cpu() {
-    return cpu_;
+  cpu_ = Processor();  // at every display cycle we need to find all the processes to update if an app is quit/killed or just aunched.
+  return cpu_;
 }
 
 // DONE by BABAK: Return a container composed of the system's processes
@@ -30,6 +31,10 @@ vector<Process>& System::Processes() {
   // Below sorts in ascending order (so smallest somes first)
   std::sort(processes_.begin(), processes_.end());
   std::reverse(processes_.begin(), processes_.end());
+
+  // REVIEWER: recommends to sort in one shot by. Note that rbegin and rend reverse the order.
+  // std::sort(processes_.rbegin(), processes_.rend());
+
   return processes_;
 }
 
